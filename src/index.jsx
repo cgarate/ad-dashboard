@@ -11,7 +11,7 @@ const queryClient = new QueryClient()
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider resetCSS={true}>
+      <ChakraProvider resetCSS>
         <ReactQueryDevtools initialIsOpen={false} />
         <App />
       </ChakraProvider>

@@ -25,9 +25,9 @@ const App = () => {
   }, [])
 
   const handleCampaignSelection = (event) => {
-    const campaignSelected = campaigns[event.target.value]
-    setCampaignSelected(campaignSelected)
-    fetch(`${ENDPOINT_CAMPAIGNS}/${campaignSelected.id}?number=0`)
+    const campaignToFetch = campaigns[event.target.value]
+    setCampaignSelected(campaignToFetch)
+    fetch(`${ENDPOINT_CAMPAIGNS}/${campaignToFetch.id}?number=0`)
       .then((response) => response.json())
       .then((data) => setCurrentDashboardData(data))
       .catch((error) => {
