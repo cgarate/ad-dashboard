@@ -1,0 +1,1 @@
+export const ENDPOINT_CAMPAIGNS = "http://localhost:4000/campaigns";
