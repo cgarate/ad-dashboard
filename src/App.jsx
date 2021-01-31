@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Container, Flex, Heading, Select } from '@chakra-ui/react'
-import { RiAdvertisementFill } from 'react-icons/ri'
+import { Box, Container, Flex } from '@chakra-ui/react'
 
 import { ENDPOINT_CAMPAIGNS } from './constants'
 import Dashboard from './components/Dashboard/Dashboard'
+import HeaderApp from './components/HeaderApp'
 
 const App = () => {
+  const iteration = 1
   const [campaigns, setCampaigns] = useState([])
   const [campaignSelected, setCampaignSelected] = useState(null)
   const [currentDashboardData, setCurrentDashboardData] = useState(null)
@@ -27,7 +28,7 @@ const App = () => {
   const handleCampaignSelection = (event) => {
     const campaignToFetch = campaigns[event.target.value]
     setCampaignSelected(campaignToFetch)
-    fetch(`${ENDPOINT_CAMPAIGNS}/${campaignToFetch.id}?number=0`)
+    fetch(`${ENDPOINT_CAMPAIGNS}/${campaignToFetch.id}?number=${iteration}`)
       .then((response) => response.json())
       .then((data) => setCurrentDashboardData(data))
       .catch((error) => {
@@ -39,27 +40,7 @@ const App = () => {
   return (
     <Box as="main">
       <Flex flexDirection="column" margin="1rem 3rem">
-        <Box maxWidth={['100%', '100%', '50%', '50%', '25%']}>
-          <Flex justifyContent="flex-start" alignItems="center">
-            <RiAdvertisementFill fontSize="44px" color="#ff8300" />
-            <Heading marginLeft="0.4rem">Campaign App</Heading>
-          </Flex>
-          <Select
-            marginTop="2rem"
-            variant="flushed"
-            placeholder="Select campaign"
-            onChange={handleCampaignSelection}
-          >
-            {campaigns.map((campaign) => (
-              <option
-                key={`campaign-${campaign.name}-${campaign.id}`}
-                value={campaign.id}
-              >
-                {campaign.name}
-              </option>
-            ))}
-          </Select>
-        </Box>
+        <HeaderApp handleCampaignSelection={handleCampaignSelection} campaigns={campaigns} />
         <Container
           margin="0"
           maxWidth="inherit"

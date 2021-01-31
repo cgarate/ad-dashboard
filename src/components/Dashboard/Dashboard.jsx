@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import React, {useState} from "react";
 import { Flex, Heading, SimpleGrid, Tag, TagLabel } from "@chakra-ui/react";
 import PropTypes from 'prop-types'
 
@@ -7,6 +8,7 @@ import { calculateCTR } from "../../utils";
 import DataCard from "./DataCard"
 
 const Dashboard = ({ dashboardData, campaignName }) => {
+  const [iteration, setIteration] = useState(1)
   const { clicks, impressions, users } = dashboardData || {};
   if (!dashboardData) return null;
 
