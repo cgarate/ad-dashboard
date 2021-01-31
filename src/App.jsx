@@ -1,39 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Container, Flex, Heading, Select } from '@chakra-ui/react'
-import { RiAdvertisementFill } from 'react-icons/ri'
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react'
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Select,
+  Skeleton,
+} from '@chakra-ui/react'
 
-import { ENDPOINT_CAMPAIGNS } from './constants'
+import { RiAdvertisementFill } from 'react-icons/ri'
+import { useQuery } from 'react-query'
+
+import { fetchCampaigns } from './api'
 import Dashboard from './components/Dashboard/Dashboard'
 
 const App = () => {
-  const [campaigns, setCampaigns] = useState([])
-  const [campaignSelected, setCampaignSelected] = useState(null)
-  const [currentDashboardData, setCurrentDashboardData] = useState(null)
-  // const queryClient = useQueryClient();
-
-  // Bring the campaign data
-  useEffect(() => {
-    fetch(ENDPOINT_CAMPAIGNS)
-      .then((apiResponse) => apiResponse.json())
-      .then((data) => {
-        setCampaigns(data.campaigns)
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log('ERROR IN API CALL: ', error)
-      })
-  }, [])
+  const [campaignId, setCampaignId] = useState(null)
+  const [campaignName, setCampaignName] = useState(null)
 
   const handleCampaignSelection = (event) => {
-    const campaignToFetch = campaigns[event.target.value]
-    setCampaignSelected(campaignToFetch)
-    fetch(`${ENDPOINT_CAMPAIGNS}/${campaignToFetch.id}?number=0`)
-      .then((response) => response.json())
-      .then((data) => setCurrentDashboardData(data))
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log('ERROR IN API CALL: ', error)
-      })
+    setCampaignId(event.target.value)
+    setCampaignName(event.target.selectedOptions[0].label)
+  }
+
+  // Bring the campaign data
+  const { isLoading, isError, data, error } = useQuery(
+    'campaigns',
+    fetchCampaigns
+  )
+
+  // eslint-disable-next-line react/no-children-prop
+  if (isError) {
+    // eslint-disable-next-line no-console
+    console.log('Error', error)
+    return <Box>An Error Occurred</Box>
   }
 
   return (
@@ -44,33 +45,38 @@ const App = () => {
             <RiAdvertisementFill fontSize="44px" color="#ff8300" />
             <Heading marginLeft="0.4rem">Campaign App</Heading>
           </Flex>
-          <Select
-            marginTop="2rem"
-            variant="flushed"
-            placeholder="Select campaign"
-            onChange={handleCampaignSelection}
-          >
-            {campaigns.map((campaign) => (
-              <option
-                key={`campaign-${campaign.name}-${campaign.id}`}
-                value={campaign.id}
-              >
-                {campaign.name}
-              </option>
-            ))}
-          </Select>
+          <Skeleton isLoaded={!isLoading}>
+            <Select
+              marginTop="2rem"
+              variant="flushed"
+              placeholder="Select campaign"
+              onChange={handleCampaignSelection}
+            >
+              {data &&
+                data.campaigns.map((campaign) => (
+                  <option
+                    key={`campaign-${campaign.name}-${campaign.id}`}
+                    value={campaign.id}
+                  >
+                    {campaign.name}
+                  </option>
+                ))}
+            </Select>
+          </Skeleton>
         </Box>
-        <Container
-          margin="0"
-          maxWidth="inherit"
-          border="1px dashed teal"
-          marginTop="3rem"
-        >
-          <Dashboard
-            campaignName={campaignSelected && campaignSelected.name}
-            dashboardData={currentDashboardData}
-          />
-        </Container>
+        {campaignId && (
+          <Container
+            margin="0"
+            maxWidth="inherit"
+            border="1px dashed teal"
+            marginTop="3rem"
+          >
+            <Dashboard
+              campaignId={campaignId}
+              campaignName={campaignName}
+            />
+          </Container>
+        )}
       </Flex>
     </Box>
   )
