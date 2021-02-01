@@ -20,7 +20,8 @@ const HeaderApp = ({ handleCampaignSelection, campaigns }) => (
           key={`campaign-${campaign.name}-${campaign.id}`}
           value={campaign.id}
         >
-          {campaign.name}
+          { /* eslint-disable-next-line react/jsx-one-expression-per-line */}
+          {campaign.id} {campaign.name}
         </option>
       ))}
     </Select>
