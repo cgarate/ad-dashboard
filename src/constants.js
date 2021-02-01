@@ -1,4 +1,5 @@
 export const ENDPOINT_CAMPAIGNS = "http://localhost:4000/campaigns";
+export const REFRESH_EVERY_X_MS = 5000
 
 // Dashboard UI
 export const metricHeadings = {
@@ -10,7 +11,7 @@ export const metricHeadings = {
   HEADING_MR_CTR: "Most Recent Click Through Rate",
   HEADING_TOTAL_USERS: "Total Users",
   HEADING_MR_USERS: "Most Recent Users",
-  HEADING_CURRENT_ITERATION: "Current Number",
+  HEADING_CURRENT_ITERATION: "Current Number/Iteration",
 };
 
 export const metricHelpText = {

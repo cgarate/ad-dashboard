@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 export const calculateCTR = (clicks, impressions) => {
   if (
-    typeof clicks !== 'number' &&
-    typeof impressions !== 'number' &&
-    impressions <= 0
+    impressions <= 0 ||
+    typeof clicks !== 'number' ||
+    typeof impressions !== 'number'
   ) {
     return null
   }
